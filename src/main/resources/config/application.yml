@@ -1,0 +1,21 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/api-demo
+        username: "api-demo"
+        password: "api-demo"
+        driver-class-name: org.postgresql.Driver 
+    security: 
+        user: 
+            name: hoge
+            password: fuga
+    jpa:
+        show-sql: true
+        properties:
+            hibernate:
+                ddl-auto: none
+                temp:
+                  use_jdbc_metadata_defaults: false;
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                     
+        
+ 

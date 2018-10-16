@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FetchTest</title>
+</head>
+
+<body>
+    <div>
+        <h3>ShowAllUsers</h3>
+        <button onclick="getAllUsers();">allusers</button>
+    </div>
+    <div>
+        <h3>CreateUser</h3>
+        <label>ID<input type="text" id="userId" /></label>
+        <label>Name<input type="text" id="userName" /></label>
+        <label>Password<input type="password" id="userPassword" /></label>
+        <button onclick="addUser();">addUser</button>
+    </div>
+    <div>
+        <h3>FindUsers</h3>
+        <label>ID<input type=text id="searchId"></label>
+        <label>Name<input type="text" id="searchName"></label>
+        <button onclick="findUsers();">find</button>
+    </div>
+    <script type="text/javascript">
+        function getAllUsers() {
+            fetch('http://localhost:8100/users/')
+                .then(res => res.json(), {
+                    mode: "cors"
+                })
+                .catch(error => {
+                    alert(error);
+                    console.log(error);
+                })
+                .then(res => {
+                    alert(JSON.stringify(res));
+                });
+        }
+
+        function findUsers() {
+            let userId = document.getElementById("searchId").value;
+            let userName = document.getElementById("searchName").value;
+            userId = userId ? userId : null;
+            userName = userName ? userName : null;
+            const user = {
+                userId: userId,
+                userName: userName
+            }
+            const body = JSON.stringify(user);
+            const method = 'POST';
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            };
+            fetch('http://localhost:8100/users/find', {
+                    method: method,
+                    body: body,
+                    headers: headers
+                })
+                .then(res => res.json())
+                .then(res => alert(JSON.stringify(res)))
+                .catch(error => alert(JSON.stringify(error)));
+        }
+
+        function addUser() {
+            const userId = document.getElementById("userId").value;
+            const userName = document.getElementById("userName").value;
+            const userPassword = document.getElementById("userPassword").value;
+            if (!userId || !userName || !userPassword) {
+                alert("input all");
+                return false;
+            }
+            const user = {
+                userId: userId,
+                userName: userName,
+                password: userPassword
+            };
+            const body = JSON.stringify(user);
+            const method = 'POST';
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': 'ok'
+            };
+            const mode = "cors";
+            fetch('http://localhost:8100/users/create/', {
+                    method: method,
+                    mode: mode,
+                    headers: headers,
+                    body: body
+                })
+                .then(res => res.json())
+                .then(res => alert(JSON.stringify(res)))
+                .catch(error => alert(JSON.stringify(error)));
+        }
+    </script>
+</body>
+
+</html>

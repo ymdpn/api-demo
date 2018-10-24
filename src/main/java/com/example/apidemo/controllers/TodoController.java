@@ -4,8 +4,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 import java.util.List;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
@@ -31,23 +29,33 @@ public class TodoController {
 		return service.findAll();
 	}
     
-    @RequestMapping(value="/create", method = POST,
+    @RequestMapping(value = "/create", method = POST,
     		consumes = MediaType.APPLICATION_JSON_VALUE,
     		produces = MediaType.APPLICATION_JSON_VALUE)
     public TodoDto create(@RequestBody @Validated TodoDto dto) {
     	return service.save(dto);
     }
     
-    @RequestMapping(value="/update?todosKey= {todosKey}", method = POST,
+    @RequestMapping(value = "/update/todosKey={todosKey}", method = POST,
     		consumes = MediaType.APPLICATION_JSON_VALUE,
     		produces = MediaType.APPLICATION_JSON_VALUE)
-    public TodoDto update(@RequestBody @Validated TodoDto dto, @PathVariable Long todosKey) {
+    public TodoDto update(@RequestBody @Validated TodoDto dto, @PathVariable("todosKey") Long todosKey) {
     	dto.setTodosKey(todosKey);
     	return service.save(dto);
     }
     
-    @RequestMapping(value="/delete?todosKey= {todosKey}", method = DELETE)
-    public void delete(@PathVariable Long todosKey) {
+    @RequestMapping(value = "/find/author={author}/title={title}", method = GET)
+    public List<TodoDto> findByTitle(@PathVariable("author") Long author, @PathVariable("title") String title) {
+    	return service.findByAuthorAndTitle(author, title);
+    }
+    
+    @RequestMapping(value = "/find/author={author}/textValue={textValue}", method = GET)
+    public List<TodoDto> findByTextValue(@PathVariable("author") Long author, @PathVariable("textValue") String textValue) {
+    	return service.findByAuthorAndTextValue(author, textValue);
+    }
+    
+    @RequestMapping(value="/delete/todosKey={todosKey}", method = DELETE)
+    public void delete(@PathVariable("todosKey") Long todosKey) {
     	service.delete(todosKey);
     }
 }

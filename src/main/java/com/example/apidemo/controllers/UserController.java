@@ -82,7 +82,7 @@ public class UserController {
      * @param userKey user_key
      * @return 更新後ユーザー情報
      */
-    @RequestMapping(value = "/update?userkey= {userKey}", method = POST, 
+    @RequestMapping(value = "/update/userkey= {userKey}", method = POST, 
     		consumes = MediaType.APPLICATION_JSON_VALUE,
     		produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDto update(@RequestBody @Valid UserDto dto, @PathVariable long userKey) {
